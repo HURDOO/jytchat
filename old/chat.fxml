@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kr.kro.hurdoo.jytchat.ui.ChatController">
+   <center>
+      <VBox fx:id="chatBox" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                  <TextField fx:id="idField" />
+                  <Button fx:id="toggleChat" mnemonicParsing="false" text="detect chat" />
+                  <Button fx:id="toggleSave" mnemonicParsing="false" text="save chat" />
+                  <Button fx:id="toggleCheck" mnemonicParsing="false" text="check start" />
+                  <Button fx:id="chatBot" text="ChatBot Connect" />
+                  <ChoiceBox fx:id="chat" prefWidth="150.0" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>

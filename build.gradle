@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+group 'kr.kro.hurdoo'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://raw.githubusercontent.com/kusaanko/maven/main/"
+    }
+    maven {
+        url "https://repo.panda-lang.org"
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    //implementation 'com.github.kusaanko:YouTubeLiveChat:1.3.3' // https://github.com/kusaanko/YouTubeLiveChat
+    implementation files ('D:/1_Coding/YouTubeLiveChat/out/artifacts/YouTubeLiveChat/YouTubeLiveChat.jar') // https://github.com/HURDOO/YouTubeLiveChat
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.github.mouse0w0:darculafx:1.0.0'
+    implementation 'org.controlsfx:controlsfx:11.1.1'
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
+
+    compile 'com.google.api-client:google-api-client:1.32.2'
+    //compile 'com.google.oauth-client:google-oauth-client:1.32.1'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev20210629-1.32.1'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
+
+    implementation 'org.projectlombok:lombok:1.18.22'
+
+    implementation 'com.github.goxr3plus:JavaFX-Web-Browser:V9.1.0'
+
+    //implementation 'com.google.oauth-client:google-oauth-client-assembly:1.31.4-sp.1'
+    //implementation 'com.github.scribejava:scribejava-core:8.3.1'
+    //implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+    //implementation group: 'com.sun.jersey', name: 'jersey-server', version: '1.19.4'
+    //compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.14'
+    //implementation group: 'com.google.oauth-client', name: 'google-oauth-client-jetty', version: '1.31.5'
+    //implementation 'org.panda-lang:pandomium:67.0.6'
+    //implementation group: 'org.bitbucket.johness', name: 'java-cef', version: '49.87.win64.2'
+    //implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+}
+
+javafx {
+    //version = "15.0.1"
+    version = '17'
+    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.web', 'javafx.swing']
+}
+
+//mainClassName = "$moduleName/kr.kro.hurdoo.jytchat.Main"
+mainClassName = "kr.kro.hurdoo.jytchat.Main"
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'kr.kro.hurdoo.jytchat.Main'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude ('**/*.sfd')
+}
+run {
+    jvmArgs = [
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+        "--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED",
+                "--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
+                "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED"
+    ]
+}
