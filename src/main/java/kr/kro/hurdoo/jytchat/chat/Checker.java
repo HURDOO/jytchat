@@ -18,7 +18,6 @@ public class Checker {
     private static final HashMap<String,String> data = new HashMap<>(); // num -> name
     private static final HashMap<String,String> checkedYoutubeID = new HashMap<>(); // school -> youtube
     private static final Pattern pattern = Pattern.compile("!(출석체크|출첵|출쳌) ((\\d{5}) ([가-히]{3,5}))");
-    private static BufferedWriter writer;
     private static boolean doCheck = false;
 
     private static void loop()
@@ -39,7 +38,7 @@ public class Checker {
         }
     }
 
-    private static void check(ChatItem item)
+    public static void check(ChatItem item)
     {
         String message = item.getMessage();
         Matcher matcher = pattern.matcher(message);

@@ -262,16 +262,6 @@ public class MainController implements Initializable //NewFileCallable
             ButtonType result = alert.showAndWait().get();
             if(result == ButtonType.OK) {
                 ChatLimit.setPermission(newValue);
-                switch (newValue) {
-                    case NONE:
-                        ChatLimit.stop();
-                        break;
-                    case CHECK:
-                    case ADMIN:
-                        ChatLimit.setPermission(newValue);
-                        ChatLimit.start();
-                        break;
-                }
             }
         });
     }

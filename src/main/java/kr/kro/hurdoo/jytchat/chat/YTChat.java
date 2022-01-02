@@ -20,8 +20,8 @@ import java.util.Locale;
 public class YTChat {
 
     private static Thread thread = new Thread(YTChat::loop);
-    private static YouTubeLiveChat chat;
-    private static boolean connect;
+    public static YouTubeLiveChat chat;
+    public static boolean connect;
 
     private static void loop()
     {
@@ -32,17 +32,18 @@ public class YTChat {
                 for(ChatItem item : chat.getChatItems())
                 {
                     if(chat == null) break;
+
+                    Checker.check(item);
+                    ChatLimit.check(item);
+
                     String msg = format.format(new Date(item.getTimestamp() / 1000))
                             + " " + item.getType()
                             + item.getAuthorType() + " "
                             + "[" + item.getAuthorName() + "]"
                             + item.getMessage();
-                    MainController.instance.write(msg);
-                    FileSaver.write(msg);
-                    Checker.write(item);
-                    ChatLimit.write(item);
 
-                    //System.out.println(item);
+                    FileSaver.write(msg);
+                    MainController.instance.write(msg);
                 }
 
                 Thread.sleep(1000);
@@ -50,7 +51,9 @@ public class YTChat {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 break;
-            } catch (NullPointerException ignored) {}
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -72,6 +75,7 @@ public class YTChat {
             connect = true;
 
             thread.start();
+            YTChatSender.start();
         } catch (IOException | IllegalThreadStateException e) {
             e.printStackTrace();
             return false;
