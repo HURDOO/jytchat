@@ -7,7 +7,6 @@ import java.io.*;
 
 public class Main {
 
-    private static YouTubeLiveChat chat = null;
     public static void main(String[] args) throws IOException {
 
         /*GoogleAuth auth = new GoogleAuth();

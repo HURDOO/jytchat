@@ -70,7 +70,7 @@ public class MainController implements Initializable //NewFileCallable
                         text.setWrappingWidth(350);
                         chatBox.getChildren().add(text);
                         msgs.remove(0);
-                        if(chatBox.getChildren().size() > 25)
+                        if(chatBox.getChildren().size() > 200)
                             chatBox.getChildren().remove(0);
                         Platform.runLater(() -> chatScroll.vvalueProperty().bind(chatBox.heightProperty()));
                     }
@@ -182,7 +182,7 @@ public class MainController implements Initializable //NewFileCallable
     private void startCheck()
     {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("출석 데이터 파일 선택");
+        chooser.setTitle("학셍 데이터 파일 선택");
         chooser.setInitialDirectory(Jytchat.studentData.getParentFile());
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("모든 파일","*.*"));
         File check = chooser.showOpenDialog(UIMain.mainStage);
@@ -211,38 +211,16 @@ public class MainController implements Initializable //NewFileCallable
             }
         });
         toggleChatBot.setDisable(true);
-        chatPermission.setItems(FXCollections.observableArrayList(ChatPermission.NONE,ChatPermission.CHECK,ChatPermission.ADMIN));
-        chatPermission.setValue(ChatPermission.NONE);
+
         sendChatButton.setOnAction(event -> {
             if(sendChatText.getText().equals("")) return;
             YTChat.sendChat(sendChatText.getText());
             sendChatText.setText("");
         });
-        chatPermission.valueProperty().addListener((observable, oldValue, newValue) -> {
-            switch (newValue) {
-                case CHECK:
-
-            }
-        });
         reloadUsername();
-    }
-    private void startChatBot()
-    {
-        try {
-            BorderPane pane = FXMLLoader.load((MainController.class.getResource("/fxml/ytcookie.fxml")));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(pane));
-            stage.show();
-            stage.setOnCloseRequest(event -> stage.close());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        toggleChatBot.setText("챗봇 해제");
-        sendChatText.setDisable(false);
-        sendChatButton.setDisable(false);
-        chatPermission.setDisable(false);
 
+        chatPermission.setItems(FXCollections.observableArrayList(ChatPermission.NONE,ChatPermission.CHECK,ChatPermission.ADMIN));
+        chatPermission.setValue(ChatPermission.NONE);
         chatPermission.valueProperty().addListener((observable, oldValue, newValue) -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initOwner(UIMain.mainStage);
@@ -262,8 +240,20 @@ public class MainController implements Initializable //NewFileCallable
             ButtonType result = alert.showAndWait().get();
             if(result == ButtonType.OK) {
                 ChatLimit.setPermission(newValue);
+            } else {
+                chatPermission.setValue(oldValue);
             }
         });
+    }
+    private void startChatBot()
+    {
+        YTCookieStage.show();
+        toggleChatBot.setText("챗봇 해제");
+        sendChatText.setDisable(false);
+        sendChatButton.setDisable(false);
+        chatPermission.setDisable(false);
+        chatPermission.setValue(ChatPermission.NONE);
+        ChatLimit.setPermission(ChatPermission.NONE);
     }
     public void stopChatBot()
     {

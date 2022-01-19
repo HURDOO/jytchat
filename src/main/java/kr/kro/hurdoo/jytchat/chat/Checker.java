@@ -17,7 +17,7 @@ public class Checker {
     private static List<ChatItem> msg = new LinkedList<>();
     private static final HashMap<String,String> data = new HashMap<>(); // num -> name
     private static final HashMap<String,String> checkedYoutubeID = new HashMap<>(); // school -> youtube
-    private static final Pattern pattern = Pattern.compile("!(출석체크|출첵|출쳌) ((\\d{5}) ([가-히]{3,5}))");
+    private static final Pattern pattern = Pattern.compile("!(check|출석체크|출첵|출쳌) ((\\d{5}) ([가-히]{3,5}))");
     private static boolean doCheck = false;
 
     private static void loop()
@@ -50,11 +50,6 @@ public class Checker {
 
             // @TODO: save to file
         }
-    }
-
-    public static void write(ChatItem item)
-    {
-        msg.add(item);
     }
 
     public static void start()

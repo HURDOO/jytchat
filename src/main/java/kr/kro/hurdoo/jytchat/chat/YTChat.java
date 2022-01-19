@@ -25,6 +25,7 @@ public class YTChat {
 
     private static void loop()
     {
+        long timestamp = 0L;
         while(connect)
         {
             try {
@@ -32,6 +33,8 @@ public class YTChat {
                 for(ChatItem item : chat.getChatItems())
                 {
                     if(chat == null) break;
+                    if(item.getTimestamp() < timestamp) break;
+                    timestamp = item.getTimestamp();
 
                     Checker.check(item);
                     ChatLimit.check(item);

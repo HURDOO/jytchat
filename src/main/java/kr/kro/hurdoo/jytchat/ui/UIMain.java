@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
@@ -27,16 +28,19 @@ public class UIMain extends Application {
     public void start(Stage primaryStage) throws Exception {
         mainStage = primaryStage;
 
+        /* load fxml */
         FXMLLoader loader = new FXMLLoader(UIMain.class.getResource("/fxml/main.fxml"));
         BorderPane pane = loader.load();
         MainController.instance = loader.getController();
         Scene scene = new Scene(pane);
+
+        /* apply style */
         DarculaFX.applyDarculaStyle(scene);
-        Font font = Font.loadFont(UIMain.class.getResourceAsStream("/font/NanumBarunGothic.ttf"),10);
-        System.out.println(font.getFamily());
+        Font.loadFont(UIMain.class.getResourceAsStream("/font/NanumBarunGothic.ttf"),10);
         pane.setStyle("-fx-font-family: \"NanumBarunGothic\"");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.getIcons().add(new Image("/icon/yt_icon_mono_light.png"));
 
         //Main.controller = loader.getController();
         //Main.controller.start();

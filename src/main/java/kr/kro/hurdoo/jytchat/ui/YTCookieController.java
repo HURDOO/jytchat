@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 
 public class YTCookieController implements Initializable {
 
+    public static YTCookieController instance;
+
     @FXML Button cookieHelp;
     @FXML Button chromeButton;
     @FXML Button youtubeButton;

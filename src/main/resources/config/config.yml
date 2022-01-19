@@ -1,0 +1,15 @@
+# Check here for more information about config: https://github.com/HURDOO/jytchat
+
+# URL of youtube video/streaming
+video-id: https://youtu.be/F4aby5WN1Rw
+
+# Student list, used to compare if the student is valid during check
+# The format must be "Number Name"
+# Example:
+#
+# 12345 홍길동
+# 67-890 David Kim
+#
+check-list: /checklist.txt
+
+#
