@@ -26,7 +26,7 @@ This app provides several helpful features for Youtube Live Chat at live streami
   * If user without permission sends the chat, the chat is deleted. You may manage the configuration to automatically ban the user, temporarily or permanently.
 
 ## Download
-Check the [releases](/releases) tab!
+Check the [releases](https://github.com/HURDOO/jytchat/releases) tab!
 
 ## Credits
 * Thanks to my middle school broadcasting club members, I made this for you.
