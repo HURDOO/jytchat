@@ -150,7 +150,11 @@ public class MainController implements Initializable //NewFileCallable
             chooser.setInitialFileName("output.txt");
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("모든 파일","*.*"));
             File check = chooser.showSaveDialog(UIMain.mainStage);
-            if(check == null) return;
+            if(check == null) {
+                stopSave();
+                toggleChatSave.setSelected(false);
+                return;
+            }
             Jytchat.chatLog = check;
 
             FileSaver.start();
@@ -181,13 +185,14 @@ public class MainController implements Initializable //NewFileCallable
     }
     private void startCheck()
     {
-        FileChooser chooser = new FileChooser();
+        /*FileChooser chooser = new FileChooser();
         chooser.setTitle("학셍 데이터 파일 선택");
         chooser.setInitialDirectory(Jytchat.studentData.getParentFile());
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("모든 파일","*.*"));
         File check = chooser.showOpenDialog(UIMain.mainStage);
         if(check == null) return;
-        Jytchat.studentData = check;
+        Jytchat.studentData = check;*/
+        // @TODO: student data input
 
         Checker.start();
         toggleChatCheck.setText("출석체크 종료");

@@ -28,4 +28,6 @@ public class PopupStage {
             if(stageList.isEmpty()) Runtime.getRuntime().exit(0);
         });
     }
+
+    // @TODO: make every popups as popup stage
 }

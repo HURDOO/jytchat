@@ -1,7 +1,7 @@
 <h1 align="center">JytChat</h1>
 <p align="center">Identifier System for Youtube Live Chat</p>
 
-[한국어 설명](README.kr.md)
+[한국어](README.kr.md)
 
 ## Introduction
 This app is Youtube Live Chat Moderation tool. You may view and save the chat, send the chat. But there is one more thing...

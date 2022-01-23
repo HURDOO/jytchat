@@ -58,8 +58,7 @@ public class Checker {
         try {
             readData();
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            //e.printStackTrace();
         }
         doCheck = true;
         thread.start();

@@ -2,20 +2,17 @@ package kr.kro.hurdoo.jytchat.ui;
 
 import com.github.mouse0w0.darculafx.DarculaFX;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import kr.kro.hurdoo.jytchat.Jytchat;
 import kr.kro.hurdoo.jytchat.chat.Checker;
 import kr.kro.hurdoo.jytchat.chat.FileSaver;
 import kr.kro.hurdoo.jytchat.chat.YTChat;
 
-import java.util.Objects;
+import java.io.File;
 
 public class UIMain extends Application {
 
@@ -40,7 +37,7 @@ public class UIMain extends Application {
         pane.setStyle("-fx-font-family: \"NanumBarunGothic\"");
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.getIcons().add(new Image("/icon/yt_icon_mono_light.png"));
+        primaryStage.getIcons().add(new Image(UIMain.class.getResource("/icon/yt_icon_mono_light.png").toURI().toString()));
 
         //Main.controller = loader.getController();
         //Main.controller.start();

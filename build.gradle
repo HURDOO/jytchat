@@ -1,11 +1,12 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id "org.beryx.jlink" version "2.24.4"
 }
 
 group 'kr.kro.hurdoo'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -29,14 +30,12 @@ dependencies {
 
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
 
-    compile 'com.google.api-client:google-api-client:1.32.2'
+    /*compile 'com.google.api-client:google-api-client:1.33.0'
     //compile 'com.google.oauth-client:google-oauth-client:1.32.1'
     compile 'com.google.apis:google-api-services-sheets:v4-rev20210629-1.32.1'
-    compile 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'*/
 
     implementation 'org.projectlombok:lombok:1.18.22'
-
-    implementation 'com.github.goxr3plus:JavaFX-Web-Browser:V9.1.0'
 
     //implementation 'com.google.oauth-client:google-oauth-client-assembly:1.31.4-sp.1'
     //implementation 'com.github.scribejava:scribejava-core:8.3.1'
@@ -52,7 +51,7 @@ dependencies {
 javafx {
     //version = "15.0.1"
     version = '17'
-    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.web', 'javafx.swing']
+    modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml']
 }
 
 //mainClassName = "$moduleName/kr.kro.hurdoo.jytchat.Main"
@@ -61,15 +60,14 @@ test {
     useJUnitPlatform()
 }
 
-jar {
+/*jar {
     manifest {
         attributes 'Main-Class': 'kr.kro.hurdoo.jytchat.Main'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    exclude ('**/*.sfd')
-}
+}*/
 run {
     jvmArgs = [
         "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
@@ -78,4 +76,8 @@ run {
                 "--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
                 "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED"
     ]
+}
+
+jlink {
+    addExtraDependencies("javafx")
 }
