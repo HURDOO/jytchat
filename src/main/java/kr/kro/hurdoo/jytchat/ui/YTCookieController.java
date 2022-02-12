@@ -35,7 +35,7 @@ public class YTCookieController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cookieHelp.setOnAction(event -> openBrowser("localhost"));
+        cookieHelp.setOnAction(event -> openBrowser("https://github.com/HURDOO/jytchat/blob/master/cookie_guide/cookie_guide_ko.md"));
         chromeButton.setOnAction(event -> openBrowser("chrome://settings/cookies/detail?site=youtube.com"));
         youtubeButton.setOnAction(event -> openBrowser("https://www.youtube.com"));
 
