@@ -1,5 +1,5 @@
 <h1 align="center">JytChat</h1>
-<p align="center">Identifier System for Youtube Live Chat</p>
+<p align="center">User Identifier System for Youtube Live Chat</p>
 
 [한국어](README.kr.md)
 
@@ -27,7 +27,9 @@ This app provides several helpful features for Youtube Live Chat at live streami
 
 ## Download
 ~~Check the [releases](https://github.com/HURDOO/jytchat/releases) tab!~~
-Compile with Java 11 & Gradle.
+
+## Compile
+Compile with Java 11 & Gradle. You'll need platform-specific javafx libraries. (Included in build.gradle)
 
 ## Credits
 * Thanks to my middle school broadcasting club members, I made this for you.
