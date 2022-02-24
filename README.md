@@ -8,7 +8,7 @@ This app is Youtube Live Chat Moderation tool. You may view and save the chat, s
 
 This was originally created for school online classes. It provides user attendance checking system, so that teachers can check students' attendance easily. Moreover, it can be also used to remove the anonymity.
 
-This is still in development! It cannot read any other names except Korean.
+This is still in development! The program is written in Korean.
 
 ## Features
 This app provides several helpful features for Youtube Live Chat at live streaming or premieres.
@@ -26,11 +26,12 @@ This app provides several helpful features for Youtube Live Chat at live streami
   * If user without permission sends the chat, the chat is deleted. You may manage the configuration to automatically ban the user, temporarily or permanently.
 
 ## Download
-~~Check the [releases](https://github.com/HURDOO/jytchat/releases) tab!~~
+Check the [releases](https://github.com/HURDOO/jytchat/releases) tab!
 
 ## Compile
 Compile with Java 11 & Gradle. You'll need platform-specific javafx libraries. (Included in build.gradle)
 
 ## Credits
+* Used [YoutubeLiveChat](https://github.com/HURDOO/YouTubeLiveChat), a java library that fetches youtube live chat.
 * Thanks to my middle school broadcasting club members, I made this for you.
   * Don't be stressed out by mischiefs anymore! Now, you may know who they are :)
