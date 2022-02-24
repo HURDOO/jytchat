@@ -4,20 +4,17 @@ import com.github.kusaanko.youtubelivechat.ChatItem;
 import kr.kro.hurdoo.jytchat.Jytchat;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Checker {
     private static Thread thread = new Thread(Checker::loop);
 
-    private static List<ChatItem> msg = new LinkedList<>();
-    private static final HashMap<String,String> data = new HashMap<>(); // num -> name
+    private static final List<ChatItem> msg = new LinkedList<>();
+    private static final HashSet<String> studentList = new HashSet<>();
     private static final HashMap<String,String> checkedYoutubeID = new HashMap<>(); // school -> youtube
-    private static final Pattern pattern = Pattern.compile("!(check|출석체크|출첵|출쳌) ((\\d{5}) ([가-히]{3,5}))");
+    private static Pattern pattern = null;
     private static boolean doCheck = false;
 
     private static void loop()
@@ -40,15 +37,38 @@ public class Checker {
 
     public static void check(ChatItem item)
     {
+        if(!doCheck) return;
         String message = item.getMessage();
         Matcher matcher = pattern.matcher(message);
         if(matcher.find()) {
             String info = matcher.group(2);
             String author = item.getAuthorChannelID();
+
+            // if same youtube id
+            if(checkedYoutubeID.containsKey(info)) {
+                ChatLimit.checkedSchoolID.remove(checkedYoutubeID.get(info));
+                checkedYoutubeID.remove(author);
+            }
+            // if same student info
+            if(ChatLimit.checkedSchoolID.containsKey(author)) {
+                checkedYoutubeID.remove(ChatLimit.checkedSchoolID.get(author));
+                ChatLimit.checkedSchoolID.remove(author);
+            }
+            // check if on student list
+            if(!studentList.isEmpty()) {
+                if(!studentList.contains(info)) {
+                    System.out.printf("Cannot find student %s\n", info);
+                    return;
+                }
+            }
+
+            checkedYoutubeID.remove(info);
+            ChatLimit.checkedSchoolID.remove(author);
             checkedYoutubeID.put(info,author);
             ChatLimit.checkedSchoolID.put(author,info);
 
             // @TODO: save to file
+            System.out.printf("%s checked for %s\n", info, author);
         }
     }
 
@@ -58,24 +78,25 @@ public class Checker {
         try {
             readData();
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         doCheck = true;
         thread.start();
     }
 
+    public static void setRegexPattern(Pattern pattern) {
+        Checker.pattern = pattern;
+    }
+
     private static void readData() throws IOException {
-        data.clear();
+        studentList.clear();
 
         BufferedReader reader = new BufferedReader(new FileReader(Jytchat.studentData));
         String s;
         while((s = reader.readLine()) != null)
         {
-            String[] split = s.split(" ");
-            if(split.length != 2) return;
-            String num = split[0];
-            String name = split[1];
-            data.put(num,name);
+            studentList.add(s);
+            System.out.println("Read student " + s);
         }
     }
 
@@ -83,5 +104,8 @@ public class Checker {
     {
         doCheck = false;
         thread = new Thread(Checker::loop);
+        studentList.clear();
+        checkedYoutubeID.clear();
+        ChatLimit.checkedSchoolID.clear();
     }
 }

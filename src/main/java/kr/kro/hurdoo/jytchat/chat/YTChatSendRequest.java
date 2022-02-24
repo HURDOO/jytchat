@@ -19,7 +19,8 @@ public class YTChatSendRequest {
     public enum YTChatSendType {
         SEND_MESSAGE,
         DELETE_CHAT,
-        TIMEBAN_USER,
-        BAN_USER
+        TIMEOUT_USER,
+        BAN_USER,
+        UNBAN_USER
     }
 }

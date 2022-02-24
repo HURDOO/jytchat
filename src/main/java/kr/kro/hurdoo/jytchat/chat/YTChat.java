@@ -16,12 +16,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class YTChat {
 
     private static Thread thread = new Thread(YTChat::loop);
     public static YouTubeLiveChat chat;
     public static boolean connect;
+    private static Map<String,String> cookies;
 
     private static void loop()
     {
@@ -64,7 +66,7 @@ public class YTChat {
     {
         try {
             try {
-                chat = new YouTubeLiveChat(Jytchat.videoId, false, IdType.VIDEO);
+                chat = new YouTubeLiveChat(YouTubeLiveChat.getVideoIdFromURL(Jytchat.videoId), false, IdType.VIDEO);
             } catch (IllegalArgumentException e)
             {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -76,6 +78,7 @@ public class YTChat {
             }
             chat.setLocale(Locale.KOREA);
             connect = true;
+            if(cookies != null) chat.setUserData(cookies);
 
             thread.start();
             YTChatSender.start();
@@ -103,8 +106,12 @@ public class YTChat {
         thread = new Thread(YTChat::loop);
     }
 
-    public static void setUserData(String APISID, String HSID, String LOGIN_INFO, String SAPISID, String SID, String SSID) {
-        chat.setUserData(SAPISID,HSID,SSID,APISID,SID,LOGIN_INFO);
+    public static void setUserData(Map<String,String> cookies) {
+        YTChat.cookies = cookies;
+        if(chat != null) {
+            if(cookies == null) chat.setUserData(null,null,null,null,null,null);
+            else chat.setUserData(cookies);
+        }
     }
 
     public static void sendChat(String message) {
@@ -113,14 +120,6 @@ public class YTChat {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String getUsername() {
-        return chat == null ? null : chat.getSignedUserName();
-    }
-
-    public static void deleteChat(ChatItem item) throws IOException {
-        chat.deleteChat(item);
     }
 
 

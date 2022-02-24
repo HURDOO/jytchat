@@ -1,15 +1,67 @@
 # Check here for more information about config: https://github.com/HURDOO/jytchat
 
+
+# Enable chat connection automatically
+enable_chat: false
+
 # URL of youtube video/streaming
-video-id: https://youtu.be/F4aby5WN1Rw
+video_id: F4aby5WN1Rw
 
-# Student list, used to compare if the student is valid during check
-# The format must be "Number Name"
-# Example:
-#
-# 12345 홍길동
-# 67-890 David Kim
-#
-check-list: /checklist.txt
 
+
+# Enable chat save automatically
+enable_save: false
+
+# Location to save chat log
+save_file: chat.txt
+
+
+
+# Enable user check system automatically
+enable_check: false
+
+# Regex used in user check system.
+# When user's chat has invalid format, it will be treated as invalid info.
+# You may use https://regexr.com/ to generate regex easily
+check_regex: "!(check|출석체크|출첵|출쳌) ((\\d{5}) ([가-히]{2,5}))"
+
+# User list, used to compare if the provided user info is valid
+# The format must match with check-regex
+checklist_file: checklist.txt
+
+
+
+# Login automatically to use 'send chat' and 'chat limit'
+enable_login: false
+
+# SECURITY WARNING: It is NOT recommended writing cookies here. You MUST NOT SHARE this config with others.
+# They can LOG IN to your account with these cookies!!!
 #
+# cookies:
+#  APISID: ###
+#  HSID: ###
+#  LOGIN_INFO: ###
+#  SAPISID: ###
+#  SID: ###
+#  SSID: ###
+#
+# ...or
+#
+# cookies: "APISID: ###; HSID: ###; YSC: ###; ..."
+#
+# More info about cookies : https://github.com/HURDOO/jytchat/blob/master/cookie_guide/cookie_guide_ko.md
+cookies: ""
+
+# Limit chat for users
+# Available options: ALL_USERS, CHECKS_ONLY, MODERATORS_ONLY
+chat_limit: CHECKS_ONLY
+
+# Message to send when unchecked user sends message on CHECKS_ONLY mode.
+# '@user' is translated into user's name
+# Set blank to not send any message
+unchecked_message: "@user !출석체크 후 채팅해주세요"
+
+# Message to send when non-moderator sends message on MODERATORS_ONLY mode.
+# '@user' is translated into user's name
+# Set as "" to not send any message
+non_mod_message: ""

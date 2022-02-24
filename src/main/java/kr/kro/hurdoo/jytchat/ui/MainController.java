@@ -1,5 +1,6 @@
 package kr.kro.hurdoo.jytchat.ui;
 
+import de.beosign.snakeyamlanno.constructor.AnnotationAwareConstructor;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -21,15 +22,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import kr.kro.hurdoo.jytchat.Jytchat;
 import kr.kro.hurdoo.jytchat.chat.*;
+import kr.kro.hurdoo.jytchat.config.Config;
 import org.controlsfx.control.ToggleSwitch;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainController implements Initializable //NewFileCallable
 {
@@ -45,7 +47,8 @@ public class MainController implements Initializable //NewFileCallable
     @FXML ToggleSwitch toggleChatBot;
     @FXML TextArea sendChatText;
     @FXML ChoiceBox<ChatPermission> chatPermission;
-    @FXML Button sendChatButton;
+    @FXML ChoiceBox<TimeCount> timeoutCount;
+    @FXML ChoiceBox<TimeCount> banCount;
     @FXML ScrollPane chatScroll;
     @FXML TextFlow chatBox;
 
@@ -56,6 +59,8 @@ public class MainController implements Initializable //NewFileCallable
         setToggleSave();
         setToggleCheck();
         setChatBot();
+
+        Platform.runLater(this::loadConfig);
     }
 
     public void start()
@@ -118,9 +123,9 @@ public class MainController implements Initializable //NewFileCallable
 
         YTChat.stop();
 
-        stopSave();
-        stopChatBot();
-        stopCheck();
+        if(toggleChatSave.isSelected()) toggleChatSave.fire();
+        if(toggleChatCheck.isSelected()) toggleChatCheck.fire();
+        if(toggleChatBot.isSelected()) toggleChatBot.fire();
 
         chatBox.getChildren().clear();
     }
@@ -138,16 +143,15 @@ public class MainController implements Initializable //NewFileCallable
             }
         });
 
-        toggleChatSave.setText("채팅 저장 켜기");
         toggleChatSave.setDisable(true);
     }
     private void startSave()
     {
         try {
             FileChooser chooser = new FileChooser();
-            chooser.setTitle("로그 파일 선택");
+            chooser.setTitle("채팅이 저장될 파일 선택");
             chooser.setInitialDirectory(Jytchat.chatLog.getParentFile());
-            chooser.setInitialFileName("output.txt");
+            chooser.setInitialFileName(Jytchat.chatLog.isDirectory() ? "output.txt" : Jytchat.chatLog.getName());
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("모든 파일","*.*"));
             File check = chooser.showSaveDialog(UIMain.mainStage);
             if(check == null) {
@@ -158,7 +162,6 @@ public class MainController implements Initializable //NewFileCallable
             Jytchat.chatLog = check;
 
             FileSaver.start();
-            toggleChatSave.setText("채팅 저장 끄기");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -166,7 +169,6 @@ public class MainController implements Initializable //NewFileCallable
     private void stopSave()
     {
         FileSaver.stop();
-        toggleChatSave.setText("채팅 저장 켜기");
     }
 
     private void setToggleCheck()
@@ -185,22 +187,19 @@ public class MainController implements Initializable //NewFileCallable
     }
     private void startCheck()
     {
-        /*FileChooser chooser = new FileChooser();
-        chooser.setTitle("학셍 데이터 파일 선택");
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("학셍 명단 파일 선택 (취소 시 출석체크 명령어와 학생 명단을 대조하지 않습니다)");
         chooser.setInitialDirectory(Jytchat.studentData.getParentFile());
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("모든 파일","*.*"));
         File check = chooser.showOpenDialog(UIMain.mainStage);
-        if(check == null) return;
-        Jytchat.studentData = check;*/
-        // @TODO: student data input
-
+        if(check != null) {
+            Jytchat.studentData = check;
+        } // else no strict check
         Checker.start();
-        toggleChatCheck.setText("출석체크 종료");
     }
     private void stopCheck()
     {
         Checker.stop();
-        toggleChatCheck.setText("출석체크 시작");
     }
 
     private void setChatBot()
@@ -217,13 +216,16 @@ public class MainController implements Initializable //NewFileCallable
         });
         toggleChatBot.setDisable(true);
 
-        sendChatButton.setOnAction(event -> {
-            if(sendChatText.getText().equals("")) return;
-            YTChat.sendChat(sendChatText.getText());
-            sendChatText.setText("");
+        sendChatText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!sendChatText.getText().contains("\n")) return;
+            Platform.runLater(() -> sendChatText.setText(""));
+            YTChatSender.write(YTChatSendRequest.YTChatSendType.SEND_MESSAGE, newValue);
         });
-        reloadUsername();
 
+        setChatPermission();
+        setCounts();
+    }
+    private void setChatPermission() {
         chatPermission.setItems(FXCollections.observableArrayList(ChatPermission.NONE,ChatPermission.CHECK,ChatPermission.ADMIN));
         chatPermission.setValue(ChatPermission.NONE);
         chatPermission.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -250,28 +252,76 @@ public class MainController implements Initializable //NewFileCallable
             }
         });
     }
+    private void setCounts() {
+        timeoutCount.setItems(FXCollections.observableList(Arrays.asList(TimeCount.values())));
+        timeoutCount.setValue(TimeCount.NONE);
+        timeoutCount.valueProperty().addListener((observable, oldValue, newValue) -> {
+            ChatLimit.setTimeoutCount(newValue);
+        });
+
+        banCount.setItems(FXCollections.observableList(Arrays.asList(TimeCount.values())));
+        banCount.setValue(TimeCount.NONE);
+        banCount.valueProperty().addListener((observable, oldValue, newValue) -> {
+            ChatLimit.setBanCount(newValue);
+        });
+    }
     private void startChatBot()
     {
         YTCookieStage.show();
-        toggleChatBot.setText("챗봇 해제");
         sendChatText.setDisable(false);
-        sendChatButton.setDisable(false);
         chatPermission.setDisable(false);
         chatPermission.setValue(ChatPermission.NONE);
         ChatLimit.setPermission(ChatPermission.NONE);
+        timeoutCount.setDisable(false);
+        banCount.setDisable(false);
     }
     public void stopChatBot()
     {
-        //Jytchat.nbAuth = null;
-        toggleChatBot.setText("챗봇 연동");
+        YTChat.setUserData(null);
         sendChatText.setDisable(true);
-        sendChatButton.setDisable(true);
         chatPermission.setDisable(true);
         chatPermission.setValue(ChatPermission.NONE);
+        ChatLimit.setPermission(ChatPermission.NONE);
+        timeoutCount.setValue(TimeCount.NONE);
+        banCount.setValue(TimeCount.NONE);
+        ChatLimit.setTimeoutCount(TimeCount.NONE);
+        ChatLimit.setBanCount(TimeCount.NONE);
+        timeoutCount.setDisable(true);
+        banCount.setDisable(true);
     }
-    public void reloadUsername() {
-        String name = YTChat.getUsername();
-        if(name != null) sendChatText.setPromptText(name + "으(로) 메세지 보내기");
-        else sendChatText.setPromptText("메세지 보내기");
+
+    private void loadConfig() {
+        Config config;
+        try {
+            config = new Yaml(new AnnotationAwareConstructor(Config.class)).load(new FileInputStream("config.yml"));
+        } catch (IOException ex) {
+            config = new Yaml(new AnnotationAwareConstructor(Config.class)).load(MainController.class.getResourceAsStream("/config/config.yml"));
+        }
+
+        if(config.video_id != null)
+        {
+            idField.setText(config.video_id);
+            if(config.enable_chat) toggleChat.fire();
+        }
+        if(config.save_file != null)
+        {
+            Jytchat.chatLog = config.save_file;
+            if(config.enable_save) toggleChatSave.fire();
+        }
+        if(config.check_regex != null || config.checklist_file != null)
+        {
+            if(config.check_regex != null) Checker.setRegexPattern(config.check_regex);
+            if(config.checklist_file != null) Jytchat.studentData = config.checklist_file;
+            if(config.enable_check) toggleChatCheck.fire();
+        }
+        if(config.cookies != null)
+        {
+            YTChat.setUserData(config.cookies);
+            if(config.enable_login) {
+                toggleChatBot.fire();
+                Platform.runLater(YTCookieStage::hide);
+                if(config.chat_limit != null) chatPermission.setValue(config.chat_limit);
+            }
+        }
     }
 }

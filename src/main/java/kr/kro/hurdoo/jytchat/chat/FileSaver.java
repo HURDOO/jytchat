@@ -13,7 +13,7 @@ import java.util.List;
 public class FileSaver {
 
     private static Thread thread = new Thread(FileSaver::loop);
-    private static List<String> chatList = new ArrayList<>();
+    private static final List<String> chatList = new ArrayList<>();
     private static BufferedWriter writer = null;
 
     private static boolean doSave = false;

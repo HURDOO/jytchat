@@ -1,7 +1,6 @@
 package kr.kro.hurdoo.jytchat.chat;
 
 import com.github.kusaanko.youtubelivechat.ChatItem;
-import com.github.kusaanko.youtubelivechat.YouTubeLiveChat;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,13 +23,16 @@ public class YTChatSender {
                             YTChat.chat.sendMessage((String) object);
                             break;
                         case DELETE_CHAT:
-                            YTChat.chat.deleteChat((ChatItem) object);
+                            ((ChatItem) object).delete();
                             break;
-                        case TIMEBAN_USER:
-                            YTChat.chat.timeBanUser((ChatItem) object);
+                        case TIMEOUT_USER:
+                            ((ChatItem) object).timeoutAuthor();
                             break;
                         case BAN_USER:
-                            YTChat.chat.banUser((ChatItem) object);
+                            ((ChatItem) object).banAuthor();
+                            break;
+                        case UNBAN_USER:
+                            ((ChatItem) object).unbanAuthor();
                             break;
                     }
                 } catch (IOException e) {

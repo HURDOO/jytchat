@@ -22,8 +22,8 @@ public class YTCookieStage {
     private static void load() {
         stage = new Stage();
 
-        stage.initOwner(UIMain.mainStage);
-        stage.setAlwaysOnTop(true);
+        //stage.initOwner(UIMain.mainStage);
+        //stage.setAlwaysOnTop(true);
         stage.setOnCloseRequest(event -> hide());
 
         try {

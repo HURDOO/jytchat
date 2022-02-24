@@ -6,12 +6,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import kr.kro.hurdoo.jytchat.chat.YTChat;
+import kr.kro.hurdoo.jytchat.config.CookieConverter;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,27 +45,22 @@ public class YTCookieController implements Initializable {
         // @TODO: explorer opens / chat.update() stops
 
         save.setOnAction(event -> {
-            if(!allCookies.getText().equals("")) {
-                String all = ";" + allCookies.getText() + ";";
-                String[] list = new String[]{"APISID","HSID","LOGIN_INFO","SAPISID","SID","SSID"};
-                TextField[] uiList = new TextField[]{APISID,HSID,LOGIN_INFO,SAPISID,SID,SSID};
+            Map<String,String> map;
+            String[] list = new String[]{"APISID","HSID","LOGIN_INFO","SAPISID","SID","SSID"};
+            TextField[] uiList = new TextField[]{APISID,HSID,LOGIN_INFO,SAPISID,SID,SSID};
 
+            if(!allCookies.getText().equals("")) {
+                map = new CookieConverter().convertToModel(allCookies.getText());
+            }
+            else {
+                map = new HashMap<>();
                 for(int i=0;i<6;i++) {
-                    Pattern pattern = Pattern.compile("[^\\w]" + list[i] + "=([^;]*);");
-                    Matcher matcher = pattern.matcher(all);
-                    if(matcher.find()) uiList[i].setText(matcher.group(1));
-                    else System.out.println("Cannot find cookie " + list[i]);
+                    map.put(list[i],uiList[i].getText());
                 }
             }
-            YTChat.setUserData(
-                    APISID.getText(),
-                    HSID.getText(),
-                    LOGIN_INFO.getText(),
-                    SAPISID.getText(),
-                    SID.getText(),
-                    SSID.getText()
-            );
-            MainController.instance.reloadUsername();
+
+            YTChat.setUserData(map);
+            YTCookieStage.hide();
         });
     }
 
