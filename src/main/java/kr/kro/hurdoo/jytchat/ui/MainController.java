@@ -60,7 +60,7 @@ public class MainController implements Initializable //NewFileCallable
         setToggleCheck();
         setChatBot();
 
-        Platform.runLater(this::loadConfig);
+        //Platform.runLater(this::loadConfig);
     }
 
     public void start()

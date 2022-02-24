@@ -14,7 +14,7 @@ public class Checker {
     private static final List<ChatItem> msg = new LinkedList<>();
     private static final HashSet<String> studentList = new HashSet<>();
     private static final HashMap<String,String> checkedYoutubeID = new HashMap<>(); // school -> youtube
-    private static Pattern pattern = null;
+    private static Pattern pattern = Pattern.compile("!(check|출석체크|출첵|출쳌) ([\\s\\S])+");
     private static boolean doCheck = false;
 
     private static void loop()
@@ -78,7 +78,8 @@ public class Checker {
         try {
             readData();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Cannot read student data, not in strict check mode.");
         }
         doCheck = true;
         thread.start();

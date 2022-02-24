@@ -3,7 +3,8 @@ package kr.kro.hurdoo.jytchat;
 import java.io.File;
 
 public class Jytchat {
-    public static String videoId = "F4aby5WN1Rw";
+    //public static String videoId = "https://youtu.be/F4aby5WN1Rw";
+    public static String videoId = "";
     public static File chatLog = new File(System.getProperty("user.dir"));
     public static File studentData = new File(System.getProperty("user.dir"));
     public static String prefix = "!출첵";
