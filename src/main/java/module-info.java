@@ -10,6 +10,7 @@ module jytchat.main {
     requires darculafx;
     requires snakeyamlanno;
     requires org.yaml.snakeyaml;
+    requires com.google.gson;
 
     opens kr.kro.hurdoo.jytchat.ui to javafx.fxml;
     exports kr.kro.hurdoo.jytchat.ui to javafx.graphics,javafx.fxml;

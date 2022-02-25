@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import kr.kro.hurdoo.jytchat.UpdateChecker;
 import kr.kro.hurdoo.jytchat.chat.Checker;
 import kr.kro.hurdoo.jytchat.chat.FileSaver;
 import kr.kro.hurdoo.jytchat.chat.YTChat;
@@ -56,5 +57,7 @@ public class UIMain extends Application {
             }
             Runtime.getRuntime().exit(0);
         });
+
+        UpdateChecker.checkUpdate();
     }
 }
