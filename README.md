@@ -18,7 +18,7 @@ This app provides several helpful features for Youtube Live Chat at live streami
 
 
 * User attendance checking system
-  * Viewers can prove their attendance by sending `!check number name` command to chat.
+  * Viewers can prove their attendance by sending `!check myInfo` command to chat. (for example, `!check 12345 ABC`)
 * Limiting chat permission (requires login and moderation permission)
   * Normal mode: everyone can send chat
   * Attendance mode: only users who checked their attendance can send chat
