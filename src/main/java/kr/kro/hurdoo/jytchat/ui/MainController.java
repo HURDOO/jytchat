@@ -1,5 +1,6 @@
 package kr.kro.hurdoo.jytchat.ui;
 
+import com.github.kusaanko.youtubelivechat.YouTubeLiveChat;
 import de.beosign.snakeyamlanno.constructor.AnnotationAwareConstructor;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -114,7 +115,7 @@ public class MainController implements Initializable //NewFileCallable
         toggleChatCheck.setDisable(false);
         toggleChatBot.setDisable(false);
 
-        thumbnail.setImage(new Image("http://img.youtube.com/vi/" + Jytchat.videoId + "/mqdefault.jpg"));
+        thumbnail.setImage(new Image("http://img.youtube.com/vi/" + YouTubeLiveChat.getVideoIdFromURL(Jytchat.videoId) + "/mqdefault.jpg"));
     }
     private void disconnect()
     {
